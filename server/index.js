@@ -3,19 +3,22 @@ process.env.NODE_ENV !== 'production' && require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const mongoConnector = require('./mongo-connector');
+const cors = require('cors');
 const port = process.env.PORT || 3000;
 const session_secret = process.env.SESSION_SECRET;
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use(session({
 	secret: session_secret,
 	resave: true,
 	saveUninitialized: true
 }));
 
-app.get('/', (req, res) => {
-	res.send('Hello World!')
-});
+app.post('/signin', require('./routes/signin'));
+app.post('/signup', require('./routes/signup'));
 
 console.log("Connecting to mongo...");
 mongoConnector.connect().then(() => {
