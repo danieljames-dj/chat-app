@@ -1,0 +1,15 @@
+.Home-heading {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	top: 30%;
+}
+
+.Home-button {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	bottom: 20%;
+}
