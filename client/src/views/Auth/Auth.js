@@ -23,7 +23,13 @@ function Auth() {
 				username: username,
 				password: password
 			}))
-			.then(_ => {
+			.then(res => {
+				const token = res.data.token;
+				AxiosInstance.interceptors.request.use(function (config) {
+					config.headers.authorization = "Bearer " + token;
+					return config;
+				});
+				localStorage.setItem('token', token);
 				setIsLoading(false);
 				history.push('/chat');
 			})
@@ -41,7 +47,12 @@ function Auth() {
 				username: username,
 				password: password
 			}))
-			.then(_ => {
+			.then(res => {
+				AxiosInstance.interceptors.request.use(function (config) {
+					localStorage.setItem('token', res.data.token);
+					config.headers.authorization = "Bearer " + res.data.token;
+					return config;
+				});
 				setIsLoading(false);
 				history.push('/chat');
 			})

@@ -1,9 +1,17 @@
-import { useHistory } from 'react-router-dom';
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
+import LoadingContext from "../../contexts/LoadingContext";
+import AxiosInstance from '../../utils/AxiosInstance';
 
 function Chat() {
+	const params = useParams();
+	const setIsLoading = useContext(LoadingContext);
+	// setIsLoading(true);
+	// AxiosInstance.get('/chat');
+	console.log(params);
 	return (
 		<div>
-			<h1 className="Home-heading">Chat Home</h1>
+			<h1>Hello World</h1>
 		</div>
 	);
 }

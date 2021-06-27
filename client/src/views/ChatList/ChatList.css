@@ -1,0 +1,9 @@
+.Chat-new {
+	margin-top: 10px;
+}
+
+.Chat-list {
+	overflow: scroll;
+	text-align: left;
+	height: 300px;
+}

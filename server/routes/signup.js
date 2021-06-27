@@ -1,6 +1,7 @@
 const { db } = require("../mongo-connector");
 
 module.exports = function(req, res) {
+	// TODO: clientside and serverside validation of username and password
 	db.users.findOne({
 		username: req.body.username
 	})
@@ -17,7 +18,7 @@ module.exports = function(req, res) {
 					} else {
 						res.status(500).send("Something went wrong in server");
 					}
-				})
+				});
 			}
 		})
 }

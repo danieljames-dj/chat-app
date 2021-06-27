@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Home from './views/Home/Home';
 import Auth from './views/Auth/Auth';
+import ChatList from './views/ChatList/ChatList';
 import Chat from './views/Chat/Chat';
 import Spinner from 'react-bootstrap/Spinner';
 import {
@@ -28,6 +29,9 @@ function App() {
 								<Auth></Auth>
 							</Route>
 							<Route exact path="/chat">
+								<ChatList></ChatList>
+							</Route>
+							<Route exact path="/chat/:id">
 								<Chat></Chat>
 							</Route>
 						</Switch>
