@@ -5,9 +5,7 @@ import { useHistory } from 'react-router-dom';
 function Home() {
 	const history = useHistory();
 	function enterApp() {
-		// TODO: Check if user is already logged in
 		history.push('/auth');
-		// setIsLoading(true);
 	}
 	return (
 		<div>

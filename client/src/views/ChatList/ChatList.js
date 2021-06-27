@@ -17,11 +17,13 @@ function ChatList() {
 	const setIsLoading = useContext(LoadingContext);
 	const keys = {
 		chatRoom: "chatRoom",
-		directChat: "directChat"
+		directChat: "directChat",
+		signOut: "signOut"
 	};
 	const [key, setKey] = useState("chatroom");
 	const history = useHistory();
 	const newRoom = useRef(null);
+	const roomName = useRef(null);
 	const username = useRef(null);
 	const [chatGroups, setChatGroups] = useState([]);
 
@@ -45,6 +47,34 @@ function ChatList() {
 		})
 	}
 
+	function enterRoom() {
+		AxiosInstance.get('/getRooms', {
+			params: {
+				chatName: roomName.current.value
+			}
+		})
+		.then(result => {
+			if (result.data.length == 1) {
+				history.push('/chat/' + result.data[0]._id);
+			} else {
+				alert("Room doesn't exist");
+			}
+		});
+	}
+
+	function signOut() {
+		localStorage.clear();
+		history.push('/');
+	}
+
+	function tabListener(key) {
+		if (key == keys.signOut) {
+			signOut();
+		} else {
+			setKey(key);
+		}
+	}
+
 	function directChat() {
 		//
 	}
@@ -62,7 +92,7 @@ function ChatList() {
 
 	return (
 		<div>
-		<Tabs defaultActiveKey={keys.chatRoom} onSelect={setKey}>
+		<Tabs defaultActiveKey={keys.chatRoom} onSelect={tabListener}>
 			<Tab eventKey={keys.chatRoom} title="Chat Room">
 				<Card className="Chat-new">
 					<Card.Body>
@@ -71,6 +101,15 @@ function ChatList() {
 							<input ref={newRoom} placeholder="Enter room name"></input>
 						</Card.Text>
 						<Button variant="primary" onClick={createRoom}>Create</Button>
+					</Card.Body>
+				</Card>
+				<Card className="Chat-new">
+					<Card.Body>
+						<Card.Title>Enter Room</Card.Title>
+						<Card.Text>
+							<input ref={roomName} placeholder="Enter room name"></input>
+						</Card.Text>
+						<Button variant="primary" onClick={enterRoom}>Enter</Button>
 					</Card.Body>
 				</Card>
 				<h3 style={{textAlign: 'left'}}>Public Rooms</h3>
@@ -86,7 +125,7 @@ function ChatList() {
 					</ListGroup>
 				</div>
 			</Tab>
-			<Tab eventKey={keys.directChat} title="Direct Chat">
+			<Tab eventKey={keys.directChat} title="Direct Chat" disabled>
 				<Card className="Chat-new">
 					<Card.Body>
 						<Card.Title>New Chat</Card.Title>
@@ -96,6 +135,8 @@ function ChatList() {
 						<Button variant="primary" onClick={directChat}>Chat</Button>
 					</Card.Body>
 				</Card>
+			</Tab>
+			<Tab eventKey={keys.signOut} title="Sign Out">
 			</Tab>
 		</Tabs>
 		</div>

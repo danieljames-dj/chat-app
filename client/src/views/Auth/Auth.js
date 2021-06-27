@@ -4,7 +4,7 @@ import {
 	Tab
 } from 'react-bootstrap';
 import { Form, Button } from 'react-bootstrap';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import EncryptPassword from '../../utils/EncryptPassword';
 import LoadingContext from '../../contexts/LoadingContext';
 import AxiosInstance from '../../utils/AxiosInstance';
@@ -15,6 +15,34 @@ function Auth() {
 	const setIsLoading = useContext(LoadingContext);
 	const history = useHistory();
 
+	useEffect(() => {
+		if (isAlreadyLoggedIn()) {
+			history.replace('/chat');
+		}
+	});
+
+	function isAlreadyLoggedIn() {
+		const token = localStorage.getItem('token');
+		const expiry = localStorage.getItem('expiry');
+		const currentDate = new Date();
+		const expiryDate = Date.parse(expiry);
+		return (token && expiry && currentDate.getTime() < expiryDate);
+	}
+
+	function signInSuccess(res) {
+		const {token, expiry} = res.data;
+		const expiryDate = new Date();
+		expiryDate.setSeconds(expiryDate.getSeconds() + expiry);
+		AxiosInstance.interceptors.request.use(function (config) {
+			config.headers.authorization = "Bearer " + res.data.token;
+			return config;
+		});
+		localStorage.setItem('token', res.data.token);
+		localStorage.setItem('expiry', expiryDate);
+		setIsLoading(false);
+		history.push('/chat');
+	}
+
 	function signIn(usernameInput, passwordInput) {
 		const username = usernameInput.current.value;
 		setIsLoading(true);
@@ -23,16 +51,7 @@ function Auth() {
 				username: username,
 				password: password
 			}))
-			.then(res => {
-				const token = res.data.token;
-				AxiosInstance.interceptors.request.use(function (config) {
-					config.headers.authorization = "Bearer " + token;
-					return config;
-				});
-				localStorage.setItem('token', token);
-				setIsLoading(false);
-				history.push('/chat');
-			})
+			.then(signInSuccess)
 			.catch(() => {
 				setIsLoading(false);
 				alert("Sign in failed. Please try again.");
@@ -47,15 +66,7 @@ function Auth() {
 				username: username,
 				password: password
 			}))
-			.then(res => {
-				AxiosInstance.interceptors.request.use(function (config) {
-					config.headers.authorization = "Bearer " + res.data.token;
-					return config;
-				});
-				localStorage.setItem('token', res.data.token);
-				setIsLoading(false);
-				history.push('/chat');
-			})
+			.then(signInSuccess)
 			.catch((err) => {
 				setIsLoading(false);
 				if (err.response && err.response.data) {

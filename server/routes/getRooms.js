@@ -1,9 +1,11 @@
 const { db } = require("../mongo-connector");
 
 module.exports = function(req, res) {
-	db.chats.find({
+	const condition = {
 		chatType: 'room'
-	}).toArray()
+	};
+	req.query.chatName && (condition.chatName = req.query.chatName);
+	db.chats.find(condition).toArray()
 		.then(roomList => {
 			res.status(200).send(roomList);
 	})
