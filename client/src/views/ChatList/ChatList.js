@@ -10,7 +10,7 @@ import {
 import { useRef, useState, useContext, useEffect } from 'react';
 import AxiosInstance from '../../utils/AxiosInstance';
 import LoadingContext from '../../contexts/LoadingContext';
-import socketClient from "socket.io-client";
+import { connectToSocket } from '../../data/SocketConnection';
 
 function ChatList() {
 
@@ -26,20 +26,7 @@ function ChatList() {
 	const [chatGroups, setChatGroups] = useState([]);
 
 	useEffect(() => {
-		const socket = socketClient('http://127.0.0.1:8080', {
-			query: {
-				token: localStorage.getItem('token')
-			}
-		});
-		socket.on('connect', () => {
-			console.log('Connected to socket');
-		});
-		socket.on('connect_error', (error) => {
-			console.log('Error connecting to socket', error);
-		});
-		socket.on('data', () => {
-			console.log("Hello");
-		});
+		connectToSocket();
 		fetchChats();
 	}, []);
 
@@ -66,7 +53,7 @@ function ChatList() {
 		AxiosInstance.get('/getRooms', {})
 		.then(result => {
 			setChatGroups(result.data);
-		})
+		});
 	}
 
 	function openChat(chat) {

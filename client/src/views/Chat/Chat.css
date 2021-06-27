@@ -1,0 +1,19 @@
+.sendMessageText {
+	background-color: red;
+	width: 60%;
+	height: 100px;
+	bottom: 0%;
+}
+
+.sendMessageButton {
+	margin-right: 0%;
+	float: right;
+	width: auto;
+	margin-bottom: 0%;
+}
+
+.chatMessage {
+	overflow: scroll;
+	text-align: left;
+	height: 300px;
+}

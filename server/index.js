@@ -48,6 +48,7 @@ app.post('/signup', require('./routes/signup'));
 app.post('/createRoom', authValidation, require('./routes/createRoom'));
 app.get('/getRooms', authValidation, require('./routes/getRooms'));
 app.get('/chat', authValidation, require('./routes/chat'));
+app.get('/getMessages', authValidation, require('./routes/getMessages'));
 
 console.log("Connecting to mongo...");
 mongoConnector.connect().then(() => {

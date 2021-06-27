@@ -49,10 +49,10 @@ function Auth() {
 			}))
 			.then(res => {
 				AxiosInstance.interceptors.request.use(function (config) {
-					localStorage.setItem('token', res.data.token);
 					config.headers.authorization = "Bearer " + res.data.token;
 					return config;
 				});
+				localStorage.setItem('token', res.data.token);
 				setIsLoading(false);
 				history.push('/chat');
 			})
