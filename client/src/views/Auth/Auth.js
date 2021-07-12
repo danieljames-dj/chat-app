@@ -34,10 +34,10 @@ function Auth() {
 		const expiryDate = new Date();
 		expiryDate.setSeconds(expiryDate.getSeconds() + expiry);
 		AxiosInstance.interceptors.request.use(function (config) {
-			config.headers.authorization = "Bearer " + res.data.token;
+			config.headers.authorization = "Bearer " + token;
 			return config;
 		});
-		localStorage.setItem('token', res.data.token);
+		localStorage.setItem('token', token);
 		localStorage.setItem('expiry', expiryDate);
 		setIsLoading(false);
 		history.push('/chat');
